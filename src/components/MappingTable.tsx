@@ -97,7 +97,14 @@ export const MappingTable: React.FC = () => {
     if (val === 3) return 'bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-bold border-blue-200 dark:border-blue-800';
     if (val === 2) return 'bg-teal-50 dark:bg-teal-950/30 text-teal-900 dark:text-teal-200 border-teal-100 dark:border-teal-900';
     if (val === 1) return 'bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800';
-    return 'bg-white dark:bg-slate-800 text-transparent border-slate-100 dark:border-slate-700/60';
+    // Empty cell — show muted dash
+    return 'bg-white dark:bg-slate-800 text-slate-300 dark:text-slate-600 border-slate-100 dark:border-slate-700/60';
+  };
+
+  // Helper: display value — '-' for no correlation
+  const displayVal = (val: MappingValue | undefined): string => {
+    if (val === 1 || val === 2 || val === 3) return String(val);
+    return '-';
   };
 
   return (
@@ -323,9 +330,9 @@ export const MappingTable: React.FC = () => {
                           className={`border border-slate-100 dark:border-slate-800/80 p-3 text-center cursor-pointer select-none transition-all duration-150 hover:scale-105 hover:shadow-inner relative ${getCellColor(val)} ${
                             isHovered ? 'ring-1 ring-blue-500/20 dark:ring-blue-400/20' : ''
                           }`}
-                          title={`Click to edit mapping\nDouble click to explain\n\n${activeDoc.justifications[co.id]?.[po.id] || 'No correlation mapped.'}`}
+                          title={`Click to cycle: - (no mapping) → 1 → 2 → 3 → -\nDouble-click to view explanation\n\n${activeDoc.justifications[co.id]?.[po.id] || 'No correlation mapped.'}`}
                         >
-                          {val}
+                          {displayVal(val)}
                         </td>
                       );
                     })}
@@ -345,9 +352,9 @@ export const MappingTable: React.FC = () => {
                           className={`border border-slate-100 dark:border-slate-800/80 p-3 text-center cursor-pointer select-none transition-all duration-150 hover:scale-105 hover:shadow-inner relative ${getCellColor(val)} ${
                             isHovered ? 'ring-1 ring-blue-500/20 dark:ring-blue-400/20' : ''
                           }`}
-                          title={`Click to edit mapping\nDouble click to explain\n\n${activeDoc.justifications[co.id]?.[pso.id] || 'No correlation mapped.'}`}
+                          title={`Click to cycle: - (no mapping) → 1 → 2 → 3 → -\nDouble-click to view explanation\n\n${activeDoc.justifications[co.id]?.[pso.id] || 'No correlation mapped.'}`}
                         >
-                          {val}
+                          {displayVal(val)}
                         </td>
                       );
                     })}
@@ -592,10 +599,10 @@ export const MappingTable: React.FC = () => {
               <tr key={co.id}>
                 <td className="border border-black p-2 font-bold font-mono bg-gray-50">{co.id}</td>
                 {activePOs.map(po => (
-                  <td key={po.id} className="border border-black p-2">{activeDoc.matrix[co.id]?.[po.id] || ''}</td>
+                  <td key={po.id} className="border border-black p-2 text-center">{activeDoc.matrix[co.id]?.[po.id] || '-'}</td>
                 ))}
                 {activePSOs.map(pso => (
-                  <td key={pso.id} className="border border-black p-2">{activeDoc.matrix[co.id]?.[pso.id] || ''}</td>
+                  <td key={pso.id} className="border border-black p-2 text-center">{activeDoc.matrix[co.id]?.[pso.id] || '-'}</td>
                 ))}
               </tr>
             ))}

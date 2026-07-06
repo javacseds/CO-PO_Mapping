@@ -24,9 +24,9 @@ export function generateMarkdownTable(doc: MappingDocument): string {
   const dataRows = doc.courseOutcomes
     .filter(co => co.description.trim() !== '')
     .map(co => {
-      let row = `| **${co.id}** | ` + activePOs.map(po => doc.matrix[co.id]?.[po.id] || '').join(' | ');
+      let row = `| **${co.id}** | ` + activePOs.map(po => doc.matrix[co.id]?.[po.id] || '-').join(' | ');
       if (activePSOs.length > 0) {
-        row += ` | ` + activePSOs.map(pso => doc.matrix[co.id]?.[pso.id] || '').join(' | ');
+        row += ` | ` + activePSOs.map(pso => doc.matrix[co.id]?.[pso.id] || '-').join(' | ');
       }
       row += ` |`;
       return row;
@@ -115,12 +115,12 @@ export function generateHTMLTable(doc: MappingDocument, includeStyles = true): s
     html += `<td ${boldTdStyle}>${co.id}</td>\n`;
     
     activePOs.forEach(po => {
-      const val = doc.matrix[co.id]?.[po.id] || '';
+      const val = doc.matrix[co.id]?.[po.id] || '-';
       html += `<td ${tdStyle}>${val}</td>\n`;
     });
 
     activePSOs.forEach(pso => {
-      const val = doc.matrix[co.id]?.[pso.id] || '';
+      const val = doc.matrix[co.id]?.[pso.id] || '-';
       html += `<td ${tdStyle}>${val}</td>\n`;
     });
     
@@ -210,8 +210,8 @@ export function exportToCSV(doc: MappingDocument) {
   const rows = activeCOs.map(co => {
     return [
       co.id,
-      ...activePOs.map(po => doc.matrix[co.id]?.[po.id] || ''),
-      ...activePSOs.map(pso => doc.matrix[co.id]?.[pso.id] || '')
+      ...activePOs.map(po => doc.matrix[co.id]?.[po.id] || '-'),
+      ...activePSOs.map(pso => doc.matrix[co.id]?.[pso.id] || '-')
     ];
   });
 
