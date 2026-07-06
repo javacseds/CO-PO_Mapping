@@ -238,6 +238,7 @@ export function exportToExcel(doc: MappingDocument) {
       <tr><td><b>Dept:</b></td><td>${doc.department}</td><td><b>Faculty:</b></td><td>${doc.facultyName}</td></tr>
       <tr><td><b>Regulation:</b></td><td>${doc.regulation}</td><td><b>Academic Year:</b></td><td>${doc.academicYear}</td></tr>
     </table>
+    <h3 style="font-family: sans-serif; margin: 10px 0 5px;">MAPPING OF CO’S& PO’S:</h3>
   `;
 
   const excelWrapper = `
@@ -308,7 +309,7 @@ export function exportToWord(doc: MappingDocument) {
       <h3>Course Outcomes</h3>
       ${cosList}
 
-      <h3>Mapping Matrix</h3>
+      <h3>MAPPING OF CO’S& PO’S:</h3>
       ${htmlTable}
 
       <p style="margin-top: 50px; font-size: 10pt; color: #64748b; text-align: right;">Report generated via OBE-MapAI.</p>

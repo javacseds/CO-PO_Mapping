@@ -263,6 +263,10 @@ export const MappingTable: React.FC = () => {
           {/* TABLE CONTAINER */}
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 md:p-6 shadow-sm overflow-x-auto">
             
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mb-2">
+              MAPPING OF CO’S& PO’S:
+            </h3>
+
             <div className="mb-4 flex items-center justify-between text-xs text-slate-400">
               <p className="italic">
                 * Click on a cell to cycle correlation strength: [Blank] → 1 (Low) → 2 (Moderate) → 3 (High).
@@ -581,7 +585,7 @@ export const MappingTable: React.FC = () => {
           </tbody>
         </table>
 
-        <h3 className="mt-8 text-lg font-bold border-b border-black pb-1">Mapping Matrix</h3>
+        <h3 className="mt-8 text-lg font-bold border-b border-black pb-1">MAPPING OF CO’S& PO’S:</h3>
         <table className="mt-4 border-collapse border border-black w-full text-xs text-center">
           <thead>
             <tr className="bg-gray-100 font-bold">
