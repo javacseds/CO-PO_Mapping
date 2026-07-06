@@ -5,7 +5,7 @@ import {
   X, Edit3, MessageSquare, ChevronDown, Check
 } from 'lucide-react';
 import { 
-  calculateAverages, copyTableToClipboard, 
+  copyTableToClipboard, 
   exportToCSV, exportToExcel, exportToWord 
 } from '../utils/exporters';
 import type { MappingValue } from '../utils/aiEngine';
@@ -38,7 +38,6 @@ export const MappingTable: React.FC = () => {
   const activeCOs = activeDoc.courseOutcomes.filter(co => co.description.trim() !== '');
   const activePOs = activeDoc.programOutcomes;
   const activePSOs = activeDoc.psoEnabled ? activeDoc.psos : [];
-  const averages = calculateAverages(activeDoc);
 
   // Handles cycling of cell mappings on click
   const handleCellClick = (coId: string, poId: string) => {
@@ -93,12 +92,8 @@ export const MappingTable: React.FC = () => {
     if (format === 'doc') exportToWord(activeDoc);
   };
 
-  const getCellColor = (val: MappingValue | number) => {
-    if (val === 3) return 'bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-bold border-blue-200 dark:border-blue-800';
-    if (val === 2) return 'bg-teal-50 dark:bg-teal-950/30 text-teal-900 dark:text-teal-200 border-teal-100 dark:border-teal-900';
-    if (val === 1) return 'bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800';
-    // Empty cell — show muted dash
-    return 'bg-white dark:bg-slate-800 text-slate-300 dark:text-slate-600 border-slate-100 dark:border-slate-700/60';
+  const getCellColor = (_val: MappingValue | number) => {
+    return 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold border-slate-400 dark:border-slate-600';
   };
 
   // Helper: display value — '-' for no correlation
@@ -262,8 +257,7 @@ export const MappingTable: React.FC = () => {
 
           {/* TABLE CONTAINER */}
           <section className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 md:p-6 shadow-sm overflow-x-auto">
-            
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mb-2">
+                     <h3 className="text-lg font-bold text-black dark:text-white font-serif mb-2.5">
               MAPPING OF CO’S& PO’S:
             </h3>
 
@@ -276,19 +270,19 @@ export const MappingTable: React.FC = () => {
               </p>
             </div>
 
-            <table className="w-full border-collapse border border-slate-200 dark:border-slate-700 font-sans text-xs">
+            <table className="w-full border-collapse border border-slate-400 dark:border-slate-600 font-serif text-sm text-black dark:text-white">
               <thead>
-                <tr className="bg-slate-50 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
+                <tr className="bg-white dark:bg-slate-800 text-black dark:text-white font-bold border-b border-slate-400 dark:border-slate-600">
                   <th 
-                    className="border border-slate-200 dark:border-slate-700 p-3 text-center font-bold bg-slate-100/50 dark:bg-slate-900/70"
-                    title="Course Outcomes"
+                    className="border border-slate-400 dark:border-slate-600 p-3 text-center font-bold bg-white dark:bg-slate-800"
+                    title="Course Outcomes / Program Outcomes"
                   >
-                    CO
+                    CO/PO
                   </th>
                   {activePOs.map(po => (
                     <th 
                       key={po.id}
-                      className="border border-slate-200 dark:border-slate-700 p-3 text-center cursor-help min-w-[50px]"
+                      className="border border-slate-400 dark:border-slate-600 p-3 text-center cursor-help min-w-[50px] bg-white dark:bg-slate-800"
                       title={`${po.id}: ${po.name}\n\n${po.description}`}
                     >
                       {po.id}
@@ -297,7 +291,7 @@ export const MappingTable: React.FC = () => {
                   {activePSOs.map(pso => (
                     <th 
                       key={pso.id}
-                      className="border border-slate-200 dark:border-slate-700 p-3 text-center cursor-help min-w-[50px] bg-slate-100/10 dark:bg-slate-900/10"
+                      className="border border-slate-400 dark:border-slate-600 p-3 text-center cursor-help min-w-[50px] bg-white dark:bg-slate-800"
                       title={`${pso.id}: ${pso.name}\n\n${pso.description}`}
                     >
                       {pso.id}
@@ -305,15 +299,15 @@ export const MappingTable: React.FC = () => {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-slate-300 dark:divide-slate-700">
                 {activeCOs.map((co) => (
                   <tr 
                     key={co.id}
-                    className="hover:bg-slate-50/40 dark:hover:bg-slate-700/10 transition"
+                    className="hover:bg-slate-100/50 dark:hover:bg-slate-700/30 transition"
                   >
                     {/* CO Label */}
                     <td 
-                      className="border border-slate-200 dark:border-slate-700 p-3 font-bold text-center bg-slate-50 dark:bg-slate-900/40 cursor-help"
+                      className="border border-slate-400 dark:border-slate-600 p-3 font-bold text-center bg-white dark:bg-slate-800 cursor-help"
                       title={`${co.id}: ${co.description}`}
                     >
                       {co.id}
@@ -331,7 +325,7 @@ export const MappingTable: React.FC = () => {
                           onDoubleClick={() => handleSelectCellForExplanation(co.id, po.id)}
                           onMouseEnter={() => setHoveredCell({ coId: co.id, poId: po.id })}
                           onMouseLeave={() => setHoveredCell(null)}
-                          className={`border border-slate-100 dark:border-slate-800/80 p-3 text-center cursor-pointer select-none transition-all duration-150 hover:scale-105 hover:shadow-inner relative ${getCellColor(val)} ${
+                          className={`border border-slate-400 dark:border-slate-600 p-3 text-center cursor-pointer select-none transition-all duration-150 hover:bg-slate-100 dark:hover:bg-slate-700 relative ${getCellColor(val)} ${
                             isHovered ? 'ring-1 ring-blue-500/20 dark:ring-blue-400/20' : ''
                           }`}
                           title={`Click to cycle: - (no mapping) → 1 → 2 → 3 → -\nDouble-click to view explanation\n\n${activeDoc.justifications[co.id]?.[po.id] || 'No correlation mapped.'}`}
@@ -353,7 +347,7 @@ export const MappingTable: React.FC = () => {
                           onDoubleClick={() => handleSelectCellForExplanation(co.id, pso.id)}
                           onMouseEnter={() => setHoveredCell({ coId: co.id, poId: pso.id })}
                           onMouseLeave={() => setHoveredCell(null)}
-                          className={`border border-slate-100 dark:border-slate-800/80 p-3 text-center cursor-pointer select-none transition-all duration-150 hover:scale-105 hover:shadow-inner relative ${getCellColor(val)} ${
+                          className={`border border-slate-400 dark:border-slate-600 p-3 text-center cursor-pointer select-none transition-all duration-150 hover:bg-slate-100 dark:hover:bg-slate-700 relative ${getCellColor(val)} ${
                             isHovered ? 'ring-1 ring-blue-500/20 dark:ring-blue-400/20' : ''
                           }`}
                           title={`Click to cycle: - (no mapping) → 1 → 2 → 3 → -\nDouble-click to view explanation\n\n${activeDoc.justifications[co.id]?.[pso.id] || 'No correlation mapped.'}`}
@@ -364,31 +358,6 @@ export const MappingTable: React.FC = () => {
                     })}
                   </tr>
                 ))}
-
-                {/* AVERAGES ROW */}
-                <tr className="bg-slate-100/60 dark:bg-slate-900/60 font-bold border-t border-slate-200 dark:border-slate-700">
-                  <td 
-                    className="border border-slate-200 dark:border-slate-700 p-3 text-center font-bold"
-                  >
-                    Average
-                  </td>
-                  {activePOs.map(po => (
-                    <td 
-                      key={po.id}
-                      className="border border-slate-200 dark:border-slate-700 p-3 text-center text-slate-800 dark:text-slate-200 bg-slate-100/50 dark:bg-slate-900/70"
-                    >
-                      {averages.pos[po.id] || '-'}
-                    </td>
-                  ))}
-                  {activePSOs.map(pso => (
-                    <td 
-                      key={pso.id}
-                      className="border border-slate-200 dark:border-slate-700 p-3 text-center text-slate-800 dark:text-slate-200 bg-slate-100/50 dark:bg-slate-900/70"
-                    >
-                      {averages.psos[pso.id] || '-'}
-                    </td>
-                  ))}
-                </tr>
               </tbody>
             </table>
           </section>
@@ -585,23 +554,23 @@ export const MappingTable: React.FC = () => {
           </tbody>
         </table>
 
-        <h3 className="mt-8 text-lg font-bold border-b border-black pb-1">MAPPING OF CO’S& PO’S:</h3>
-        <table className="mt-4 border-collapse border border-black w-full text-xs text-center">
+        <h3 className="mt-8 text-lg font-bold font-serif border-b border-black pb-1">MAPPING OF CO’S& PO’S:</h3>
+        <table className="mt-4 border-collapse border border-black w-full text-sm text-center font-serif font-bold">
           <thead>
-            <tr className="bg-gray-100 font-bold">
-              <th className="border border-black p-2">CO</th>
+            <tr className="bg-white text-black font-bold">
+              <th className="border border-black p-2">CO/PO</th>
               {activePOs.map(po => (
-                <th key={po.id} className="border border-black p-2 font-mono">{po.id}</th>
+                <th key={po.id} className="border border-black p-2">{po.id}</th>
               ))}
               {activePSOs.map(pso => (
-                <th key={pso.id} className="border border-black p-2 font-mono">{pso.id}</th>
+                <th key={pso.id} className="border border-black p-2">{pso.id}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {activeCOs.map(co => (
-              <tr key={co.id}>
-                <td className="border border-black p-2 font-bold font-mono bg-gray-50">{co.id}</td>
+              <tr key={co.id} className="bg-white text-black">
+                <td className="border border-black p-2 font-bold">{co.id}</td>
                 {activePOs.map(po => (
                   <td key={po.id} className="border border-black p-2 text-center">{activeDoc.matrix[co.id]?.[po.id] || '-'}</td>
                 ))}
@@ -610,15 +579,6 @@ export const MappingTable: React.FC = () => {
                 ))}
               </tr>
             ))}
-            <tr className="bg-gray-100 font-bold">
-              <td className="border border-black p-2">Average</td>
-              {activePOs.map(po => (
-                <td key={po.id} className="border border-black p-2">{averages.pos[po.id] || '-'}</td>
-              ))}
-              {activePSOs.map(pso => (
-                <td key={pso.id} className="border border-black p-2">{averages.psos[pso.id] || '-'}</td>
-              ))}
-            </tr>
           </tbody>
         </table>
 
